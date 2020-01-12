@@ -9,6 +9,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        document.title = 'Standup Buddy | Home';
         this.getTeams();
     }
 
