@@ -11,10 +11,219 @@ paths:
       summary: Returns a list of teams.
       responses:
         '200':
+          description: A JSON array of teams.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  teams:
+                    type: array
+                    teams:
+                      $ref: '#/components/schemas/Team'
+    post:
+      summary: 'Create a new team.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+      responses:
+        '201':
+          description: A new team was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    $ref: '#/components/schemas/Team'
+  /teams/{id}:
+    get:
+      summary: 'Returns a team object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: Team ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A team object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    $ref: '#/components/schemas/Team'
+    put:
+      summary: 'Updates a team object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: Team ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Team object updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    $ref: '#/components/schemas/Team'
+    delete:
+      summary: 'Deletes a team object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: Team ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Team object deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /items:
+    get:
+      summary: Returns a list of items.
+      parameters:
+        - name: item_date
+          in: query
+          description: Max date to step back 48 hours
+      responses:
+        '200':
           description: A JSON array of items
           content:
             application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string
+              schema:
+                type: object
+                properties: 
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+    post:
+      summary: 'Create a new item.'
+      responses:
+        '201':
+          description: A new item was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+  /items/{id}:
+    get:
+      summary: 'Returns an item object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: Item ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: An item object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+    put:
+      summary: 'Updates an item object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: Item ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item object updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+    delete:
+      summary: 'Deletes an item object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: Item ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item object deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string               
+components:
+  schemas:
+    Team:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        owner_id:
+          type: integer
+        created_at:
+          type: string
+    Item:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        item_date:
+          type: string
+        completed:
+          type: boolean
+        created_at:
+          type: string
+        team_id:
+          type: integer
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        created_at:
+          type: string
