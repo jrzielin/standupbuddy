@@ -37,6 +37,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /login:
+    post:
+      summary: Login to Standup Buddy and retrieve Bearer JWT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: joeyzielinski@standupbuddy.com
+                password:
+                  type: string
+                  example: kl1jh24ljk12h4
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+                    example: k23jh4kj23hf3
   /teams:
     get:
       summary: Returns a list of teams.
