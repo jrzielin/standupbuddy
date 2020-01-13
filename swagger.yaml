@@ -9,6 +9,10 @@ paths:
   /teams:
     get:
       summary: Returns a list of teams.
+      parameters:
+        - name: search
+          in: query
+          description: Narrow results by searching for the name of a team.
       responses:
         '200':
           description: A JSON array of teams.
@@ -19,15 +23,20 @@ paths:
                 properties: 
                   teams:
                     type: array
-                    teams:
-                      $ref: '#/components/schemas/Team'
+                    $ref: '#/components/schemas/Team'
     post:
       summary: 'Create a new team.'
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Team'
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'Positive Pals'
       responses:
         '201':
           description: A new team was created.
@@ -60,6 +69,8 @@ paths:
                     $ref: '#/components/schemas/Team'
     put:
       summary: 'Updates a team object by id.'
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -67,6 +78,15 @@ paths:
           required: true
           schema:
             type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Amazon
       responses:
         '200':
           description: Team object updated.
@@ -79,6 +99,8 @@ paths:
                     $ref: '#/components/schemas/Team'
     delete:
       summary: 'Deletes a team object by id.'
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -99,10 +121,15 @@ paths:
   /items:
     get:
       summary: Returns a list of items.
+      security:
+        - bearerAuth: []
       parameters:
         - name: item_date
           in: query
           description: Max date to step back 48 hours
+        - name: search
+          in: query
+          description: Filter results containing search.
       responses:
         '200':
           description: A JSON array of items
@@ -113,10 +140,11 @@ paths:
                 properties: 
                   items:
                     type: array
-                    items:
-                      $ref: '#/components/schemas/Item'
+                    $ref: '#/components/schemas/Item'
     post:
       summary: 'Create a new item.'
+      security:
+        - bearerAuth: []
       responses:
         '201':
           description: A new item was created.
@@ -130,6 +158,8 @@ paths:
   /items/{id}:
     get:
       summary: 'Returns an item object by id.'
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -149,6 +179,8 @@ paths:
                     $ref: '#/components/schemas/Item'
     put:
       summary: 'Updates an item object by id.'
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -168,6 +200,8 @@ paths:
                     $ref: '#/components/schemas/Item'
     delete:
       summary: 'Deletes an item object by id.'
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -184,8 +218,52 @@ paths:
                 type: object
                 properties:
                   message:
-                    type: string               
+                    type: string 
+                    example: Successfully deleted item
+  /users:
+    get:
+      summary: Returns a list of users.
+      parameters:
+        - name: search
+          in: query
+          description: Narrow results by searching for the name of a user.
+      responses:
+        '200':
+          description: A JSON array of users.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  users:
+                    type: array
+                    $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: 'Returns a user object by id.'
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Team:
       properties:
@@ -193,10 +271,12 @@ components:
           type: integer
         name:
           type: string
+          example: Standup Buddy
         owner_id:
           type: integer
         created_at:
           type: string
+          example: 2020-01-01T00:00:00Z
     Item:
       properties:
         id:
@@ -205,14 +285,19 @@ components:
           type: integer
         title:
           type: string
+          example: Migrated backend
         description:
           type: string
+          example: Migrated backend from Google Cloud to AWS
         item_date:
           type: string
+          example: 2020-01-01T00:00:00Z
         completed:
           type: boolean
+          example: false
         created_at:
           type: string
+          example: 2020-01-01T00:00:00Z
         team_id:
           type: integer
     User:
@@ -221,9 +306,13 @@ components:
           type: integer
         email:
           type: string
+          example: joey@standupbuddy.com
         first_name:
           type: string
+          example: Joey
         last_name:
           type: string
+          example: Zielinski
         created_at:
           type: string
+          example: 2020-01-01T00:00:00Z
