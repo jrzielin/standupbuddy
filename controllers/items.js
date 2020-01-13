@@ -26,11 +26,12 @@ createItem = (req, res) => {
 }
 
 getItem = (req, res) => {
+    const userId = req.user.id;
     const itemId = parseInt(req.params.itemId) || null;
 
     if(!itemId) return missingItemIdResponse(res);
 
-    db.one('SELECT id, title, description, item_date, completed, user_id, created_at, team_id FROM items WHERE id = $1', itemId)
+    db.one('SELECT id, title, description, item_date, completed, user_id, created_at, team_id FROM items WHERE id = $1 AND user_id = $2', [itemId, userId])
     .then(item => res.status(200).json({item: item}))
     .catch(err => res.status(500).json({error: 'Unable to get item.'}));
 }
