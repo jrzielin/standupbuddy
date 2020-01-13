@@ -6,6 +6,37 @@ info:
 servers:
   - url: https://standup-buddy.herokuapp.com/api
 paths:
+  /register:
+    post:
+      summary: Create a new account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Joey
+                last_name:
+                  type: string
+                  example: Zielinski
+                email:
+                  type: string
+                  example: joeyzielinski@standupbuddy.com
+                password:
+                  type: string
+                  example: kl1jh24ljk12h4
+                confirm_password:
+                  type: string
+                  example: kl1jh24ljk12h4
+      responses:
+        '201':
+          description: New user successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /teams:
     get:
       summary: Returns a list of teams.
