@@ -10,7 +10,7 @@ CREATE TABLE users (
 CREATE TABLE teams (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    owner_id INTEGER REFERENCES users (id),
+    owner_id INTEGER REFERENCES users (id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
@@ -21,11 +21,12 @@ CREATE TABLE items (
     description TEXT NOT NULL DEFAULT '',
     completed BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    team_id INTEGER REFERENCES teams (id)
+    team_id INTEGER REFERENCES teams (id) ON DELETE CASCADE
 );
 
 CREATE TABLE user_teams (
-    user_id INTEGER NOT NULL REFERENCES users (id),
-    team_id INTEGER NOT NULL REFERENCES teams (id),
-    joined_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    team_id INTEGER NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+    joined_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, team_id)
 );
