@@ -1,0 +1,31 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(254) NOT NULL,
+    password VARCHAR(128) NOT NULL,
+    first_name VARCHAR(30) NOT NULL DEFAULT '',
+    last_name VARCHAR(150) NOT NULL DEFAULT '',
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW() 
+);
+
+CREATE TABLE teams (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    owner_id INTEGER REFERENCES users (id),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE items (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id),
+    title VARCHAR(255) NOT NULL DEFAULT '',
+    description TEXT NOT NULL DEFAULT '',
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    team_id INTEGER REFERENCES teams (id)
+);
+
+CREATE TABLE user_teams (
+    user_id INTEGER NOT NULL REFERENCES users (id),
+    team_id INTEGER NOT NULL REFERENCES teams (id),
+    joined_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);

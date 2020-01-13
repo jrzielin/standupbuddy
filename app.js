@@ -15,8 +15,9 @@ app.use(helmet());
 
 app.use(cors());
 
-app.use(bodyParser.json({
-    type: 'application/json'
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
 }));
 
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -37,6 +38,7 @@ app.get('/api/items/:itemId', itemController.getItem);
 app.put('/api/items/:itemId', itemController.updateItem);
 app.delete('/api/items/:itemId', itemController.deleteItem);
 
+/* Render React Front End */
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
