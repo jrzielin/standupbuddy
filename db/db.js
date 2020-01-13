@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const db = pgp(process.env.DB_CONNECTION);
+const db = pgp(process.env.DB_CONNECTION, ssl=true);
 
 module.exports = {
     db: db
