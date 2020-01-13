@@ -8,8 +8,10 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 const app = express();
+const authenticationController = require('./controllers/authentication');
 const teamController = require('./controllers/teams');
 const itemController = require('./controllers/items');
+const passport = require('passport');
 
 app.use(helmet());
 
@@ -22,19 +24,23 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+/* Authentication */
+app.post('/login', authenticationController.login);
+app.post('/register', authenticationController.register);
+
 /* Teams */
 app.get('/api/teams', teamController.getTeams);
-app.post('/api/teams', teamController.createTeam);
+app.post('/api/teams', passport.authenticate('jwt', {session: false}), teamController.createTeam);
 app.get('/api/teams/:teamId', teamController.getTeam);
-app.put('/api/teams/:teamId', teamController.updateTeam);
-app.delete('/api/teams/:teamId', teamController.deleteTeam);
+app.put('/api/teams/:teamId', passport.authenticate('jwt', {session: false}), teamController.updateTeam);
+app.delete('/api/teams/:teamId', passport.authenticate('jwt', {session: false}), teamController.deleteTeam);
 
 /* Items */
-app.get('/api/items', itemController.getItems);
-app.post('/api/items', itemController.createItem);
-app.get('/api/items/:itemId', itemController.getItem);
-app.put('/api/items/:itemId', itemController.updateItem);
-app.delete('/api/items/:itemId', itemController.deleteItem);
+app.get('/api/items', passport.authenticate('jwt', {session: false}), itemController.getItems);
+app.post('/api/items', passport.authenticate('jwt', {session: false}), itemController.createItem);
+app.get('/api/items/:itemId', passport.authenticate('jwt', {session: false}), itemController.getItem);
+app.put('/api/items/:itemId', passport.authenticate('jwt', {session: false}), itemController.updateItem);
+app.delete('/api/items/:itemId', passport.authenticate('jwt', {session: false}), itemController.deleteItem);
 
 /* Render React Front End */
 app.get('*', (req, res) => {

@@ -1,10 +1,9 @@
+const db = require('../db/db').db;
+
 getTeams = (req, res) => {
-    res.status(200).json({
-        teams: [{
-            id: 1,
-            name: 'Standup Buddy'
-        }]
-    });
+    db.any('SELECT id, name, owner_id, created_at FROM teams ORDER BY name')
+    .then(teams => res.status(200).json({teams: teams}))
+    .catch(err => res.status(500).json({error: 'Unable to query teams'}));
 }
 
 createTeam = (req, res) => {

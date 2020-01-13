@@ -1,65 +1,38 @@
-getItems = (req, res) => {
-    const userId = 1;
-    const title = "Did a thing";
-    const description = "It was hard.";
-    const itemDate = null;
-    const completed = false;
-    const teamId = null;
+const db = require('../db/db').db;
+const moment = require('moment');
 
-    res.status(200).json({
-        items: [{
-            id: 2,
-            user_id: userId,
-            title: title,
-            description: description,
-            item_date: itemDate,
-            completed: completed,
-            team_id: teamId
-        }]
-    });
+getItems = (req, res) => {
+    const userId = req.user.id;
+    
+    db.any('SELECT id, title, description, item_date, completed, user_id, created_at, team_id FROM items WHERE user_id = $1 ORDER BY item_date', userId)
+    .then(items => res.status(200).json({items: items}))
+    .catch(err => res.status(500).json({error: 'Unable to query items'}));
 }
 
 createItem = (req, res) => {
-    const userId = null;
+    const userId = req.user.id;
     const title = req.body.title || "";
     const description = req.body.description || "";
-    const itemDate = req.body.item_date || null;
-    const completed = req.body.completed || false;
+    const itemDate = req.body.item_date;
     const teamId = req.body.team_id || null;
 
     if(!title) return createError(res, 'Must supply a name.');
     if(!itemDate) return createError(res, 'Must supply an item date.');
+    if(!moment(itemDate, 'YYYY-MM-DDTHH:mm:ssZ').isValid()) return createError('Invalid format for item date.');
 
-    res.status(201).json({
-        team: {
-            id: 2,
-            user_id: userId,
-            title: title,
-            description: description,
-            item_date: itemDate,
-            completed: completed,
-            team_id: teamId
-        }
-    });
+    db.one('INSERT INTO items (user_id, title, description, item_date, team_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, user_id, title, description, item_date, completed, created_at, team_id', [userId, title, description, itemDate, teamId])
+    .then(item => res.status(200).json({item: item}))
+    .catch(err => res.status(500).json({error: 'Unable to create item.'}));
 }
 
 getItem = (req, res) => {
     const itemId = parseInt(req.params.itemId) || null;
-    const userId = null;
 
     if(!itemId) return missingItemIdResponse(res);
 
-    res.status(200).json({
-        item: {
-            id: itemId,
-            user_id: userId,
-            title: 'Some Item',
-            description: '',
-            item_date: '',
-            completed: false,
-            team_id: null
-        }
-    });
+    db.one('SELECT id, title, description, item_date, completed, user_id, created_at, team_id FROM items WHERE id = $1', itemId)
+    .then(item => res.status(200).json({item: item}))
+    .catch(err => res.status(500).json({error: 'Unable to get item.'}));
 }
 
 updateItem = (req, res) => {
