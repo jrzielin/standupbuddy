@@ -25,8 +25,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /* Authentication */
-app.post('/login', authenticationController.login);
-app.post('/register', authenticationController.register);
+app.post('/api/login', authenticationController.login);
+app.post('/api/register', authenticationController.register);
 
 /* Teams */
 app.get('/api/teams', teamController.getTeams);
