@@ -4,7 +4,10 @@ const moment = require('moment');
 getItems = (req, res) => {
     const userId = req.user.id;
     
-    db.any('SELECT id, title, description, item_date, completed, user_id, created_at, team_id FROM items WHERE user_id = $1 ORDER BY item_date', userId)
+    db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
+    .from('items')
+    .where('user_id', userId)
+    .orderBy('item_date')
     .then(items => res.status(200).json({items: items}))
     .catch(err => res.status(500).json({error: 'Unable to query items'}));
 }
@@ -31,9 +34,15 @@ getItem = (req, res) => {
 
     if(!itemId) return missingItemIdResponse(res);
 
-    db.one('SELECT id, title, description, item_date, completed, user_id, created_at, team_id FROM items WHERE id = $1 AND user_id = $2', [itemId, userId])
+    db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
+    .from('items')
+    .where({
+        id: itemId,
+        user_id: userId
+    })
+    .first()
     .then(item => res.status(200).json({item: item}))
-    .catch(err => res.status(500).json({error: 'Unable to get item.'}));
+    .catch(err => res.status(500).json({error: 'Unable to get item'}));
 }
 
 updateItem = (req, res) => {
