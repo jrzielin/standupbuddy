@@ -3,13 +3,33 @@ const moment = require('moment');
 
 getItems = (req, res) => {
     const userId = req.user.id;
-    
-    db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
-    .from('items')
-    .where('user_id', userId)
-    .orderBy('item_date')
-    .then(items => res.status(200).json({items: items}))
-    .catch(err => res.status(500).json({error: 'Unable to get items'}));
+
+    if(req.query.item_date) {
+        const ceilingDate = moment(req.query.item_date, 'YYYY-MM-DDTHH:mm:ssZ');
+        const temp = ceilingDate.clone();
+
+        if(!ceilingDate.isValid()) {
+            return response.status(400).json({error: 'Invalid item_date format. Format needs to be YYYY-MM-DDTHH:mm:ssZ.'});
+        }
+
+        const floorDate = temp.subtract(2, 'days');
+
+        db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
+        .from('items')
+        .where('user_id', userId)
+        .whereBetween('item_date', [floorDate.utc().format(), ceilingDate.utc().format()])
+        .orderBy('item_date')
+        .then(items => res.status(200).json({items: items}))
+        .catch(err => res.status(500).json({error: 'Unable to get items'}));
+    }
+    else {
+        db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
+        .from('items')
+        .where('user_id', userId)
+        .orderBy('item_date')
+        .then(items => res.status(200).json({items: items}))
+        .catch(err => res.status(500).json({error: 'Unable to get items'}));
+    }
 }
 
 createItem = (req, res) => {
