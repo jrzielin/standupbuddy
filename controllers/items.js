@@ -9,7 +9,7 @@ getItems = (req, res) => {
     .where('user_id', userId)
     .orderBy('item_date')
     .then(items => res.status(200).json({items: items}))
-    .catch(err => res.status(500).json({error: 'Unable to query items'}));
+    .catch(err => res.status(500).json({error: err}));
 }
 
 createItem = (req, res) => {
