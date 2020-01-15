@@ -12,30 +12,33 @@ passport.use(new LocalStrategy({
         passwordField: 'password'
     }, 
     function (email, password, cb) {
-        db.one('SELECT id, email, password, first_name, last_name FROM users WHERE email = $1', email)
+        db.select(['id', 'email', 'password', 'first_name', 'last_name', 'created_at']).where({email})
         .then(data => {
-            bcrypt.compare(password, data.password)
-            .then(res => {
-                if(res === true) {
-                    const user = {
-                        id: data.id,
-                        email: data.email,
-                        first_name: data.first_name,
-                        last_name: data.last_name
-                    };
-                    return cb(null, user, {message: 'Logged In Successfully'});
-                }
-                else {
-                    return cb(null, false, {error: 'Incorrect email or password'});
-                }
-            })
-            .catch(error => {
-                return cb(error);
-            });
+            if(data.length) {
+                data = data[0];
+                bcrypt.compare(password, data.password)
+                .then(res => {
+                    if(res === true) {
+                        const user = {
+                            id: data.id,
+                            email: data.email,
+                            first_name: data.first_name,
+                            last_name: data.last_name,
+                            created_at: data.created_at
+                        };
+                        return cb(null, user, {message: 'Logged In Successfully'});
+                    }
+                    else {
+                        return cb(null, false, {error: 'Incorrect email or password'});
+                    }
+                })
+                .catch(error => cb(error));
+            }
+            else {
+                return cb(null, false, {error: 'Unable to authenticate'});
+            }
         })
-        .catch(error => {
-            return cb(null, false, {error: 'Unable to authenticate'});
-        });
+        .catch(err => cb(null, false, {error: 'Unable to authenticate'}));
     }
 ));
 
@@ -49,7 +52,8 @@ passport.use(new JWTStrategy({
             id: jwtPayload.id,
             email: jwtPayload.email,
             first_name: jwtPayload.first_name,
-            last_name: jwtPayload.last_name
+            last_name: jwtPayload.last_name,
+            created_at: jwtPayload.created_at
         };
 
         return cb(null, user);

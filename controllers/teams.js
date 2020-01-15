@@ -9,16 +9,16 @@ getTeams = (req, res) => {
 }
 
 createTeam = (req, res) => {
+    const owner_id = req.user.id;
     const name = req.body.name || "";
 
     if(!name) return createError(res, 'Must supply a name.');
 
-    res.status(201).json({
-        team: {
-            id: 2,
-            name: name
-        }
-    });
+    db('teams')
+    .insert({name, owner_id})
+    .returning(['id', 'name', 'owner_id', 'created_at'])
+    .then(team => res.status(201).json({team: team[0]}))
+    .catch(err => res.status(500).json({error: 'Unable to create team'}));
 }
 
 getTeam = (req, res) => {
@@ -26,38 +26,79 @@ getTeam = (req, res) => {
 
     if(!teamId) return missingTeamIdResponse(res);
 
-    res.status(200).json({
-        team: {
-            id: teamId,
-            name: 'Some Team'
-        }
-    });
+    db.select(['id', 'name', 'owner_id', 'created_at'])
+    .from('teams')
+    .where({id: teamId})
+    .then(team => team.length ? res.status(200).json({team: team[0]}): res.status(404).json({error: 'Team not found'}))
+    .catch(err => res.status(500).json({error: 'Unable to get team'}));
 }
 
 updateTeam = (req, res) => {
-    const teamId = parseInt(req.params.teamId) || null;
+    const id = parseInt(req.params.teamId) || null;
+    const user_id = req.user.id;
     const name = req.body.name || "";
+    const owner_id = req.body.owner_id || null;
 
-    if(!teamId) return missingTeamIdResponse(res);
+    if(!id) return missingTeamIdResponse(res);
 
-    res.status(200).json({
-        team: {
-            id: teamId,
-            name: name
+    let params = {};
+    if(owner_id) params['owner_id'] = owner_id;
+    if(name) params['name'] = name;
+
+    db
+    .select(['id', 'name', 'owner_id'])
+    .from('teams')
+    .where({id})
+    .then(team => {
+        if(team.length) {
+            team = team[0];
+            if(team.owner_id == user_id) {
+                db('teams')
+                .where({id})
+                .update(params)
+                .returning(['id', 'name', 'owner_id', 'created_at'])
+                .then(team => res.status(200).json({team: team[0]}))
+                .catch(err => res.status(500).json({error: 'Unable to update team'}));
+            }
+            else {
+                res.status(403).json({error: 'Unauthorized to update team'});
+            }
         }
-    });
+        else {
+            res.status(404).json({error: "Team not found"});
+        }
+    })
+    .catch(err => res.status(500).json({error: 'Unable to update team'}));
 }
 
 deleteTeam = (req, res) => {
-    const teamId = parseInt(req.params.teamId) || null;
+    const team_id = parseInt(req.params.teamId) || null;
 
-    if(!teamId) {
-        return missingTeamIdResponse(res);
-    }
+    if(!team_id) return missingTeamIdResponse(res);
 
-    res.status(200).json({
-        message: 'Team deleted successfully'
-    });
+    db
+    .select(['id', 'name', 'owner_id'])
+    .from('teams')
+    .where({id})
+    .then(team => {
+        if(team.length) {
+            team = team[0];
+            if(team.owner_id == user_id) {
+                db('teams')
+                .where({id})
+                .del()
+                .then(count => res.status(200).json({message: 'Team deleted successfully'}))
+                .catch(err => res.status(500).json({error: 'Unable to delete team'}));
+            }
+            else {
+                res.status(403).json({error: 'Unauthorized to delete team'});
+            }
+        }
+        else {
+            res.status(404).json({error: "Team not found"});
+        }
+    })
+    .catch(err => res.status(500).json({error: 'Unable to update team'}));
 }
 
 missingTeamIdResponse = (res) => {

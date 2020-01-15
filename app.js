@@ -29,9 +29,9 @@ app.post('/api/login', authenticationController.login);
 app.post('/api/register', authenticationController.register);
 
 /* Teams */
-app.get('/api/teams', teamController.getTeams);
+app.get('/api/teams', passport.authenticate('jwt', {session: false}), teamController.getTeams);
 app.post('/api/teams', passport.authenticate('jwt', {session: false}), teamController.createTeam);
-app.get('/api/teams/:teamId', teamController.getTeam);
+app.get('/api/teams/:teamId', passport.authenticate('jwt', {session: false}), teamController.getTeam);
 app.put('/api/teams/:teamId', passport.authenticate('jwt', {session: false}), teamController.updateTeam);
 app.delete('/api/teams/:teamId', passport.authenticate('jwt', {session: false}), teamController.deleteTeam);
 
