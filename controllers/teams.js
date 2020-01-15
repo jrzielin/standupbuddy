@@ -1,11 +1,36 @@
 const db = require('../db/db').db;
 
 getTeams = (req, res) => {
-    db.select(['id', 'name', 'owner_id', 'created_at'])
-    .from('teams')
-    .orderBy('name')
-    .then(teams => res.status(200).json({teams: teams}))
-    .catch(err => res.status(500).json({error: 'Unable to query teams'}));
+    const user_id = req.user.id;
+    const mine = req.query.mine || 'false';
+
+    if(mine == 'true') {
+        db.select(['id', 'name', 'owner_id', 'created_at'])
+        .from('teams')
+        .where({owner_id: user_id})
+        .orderBy('name')
+        .then(teams => res.status(200).json({teams: teams}))
+        .catch(err => res.status(500).json({error: 'Unable to query teams'}));
+    }
+    else {
+        let page = parseInt(req.query.page) || 1;
+        let page_size = parseInt(req.query.page_size) || 10;
+        const search = req.query.search || '';
+
+        if(page < 1) page = 1;
+        if(page_size > 100) page_size = 100;
+        
+        const offset = (page - 1) * page_size;
+
+        db.select(['id', 'name', 'owner_id', 'created_at'])
+        .from('teams')
+        .where('name', 'ilike', '%' + search + '%')
+        .orderBy('name')
+        .limit(page_size)
+        .offset(offset)
+        .then(teams => res.status(200).json({teams: teams}))
+        .catch(err => res.status(500).json({error: 'Unable to query teams'}));
+    }
 }
 
 createTeam = (req, res) => {

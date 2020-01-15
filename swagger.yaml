@@ -71,9 +71,16 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - name: mine
+          in: query
+          description: Set to true to only return teams you own.
         - name: search
           in: query
           description: Narrow results by searching for the name of a team.
+        - name: page
+          in: query
+        - name: page_size
+          in: query
       responses:
         '200':
           description: A JSON array of teams.
@@ -193,6 +200,10 @@ paths:
         - name: search
           in: query
           description: Filter results containing search.
+        - name: page
+          in: query
+        - name: page_size
+          in: query
       responses:
         '200':
           description: A JSON array of items
@@ -316,6 +327,10 @@ paths:
         - name: search
           in: query
           description: Narrow results by searching for the name of a user.
+        - name: page
+          in: query
+        - name: page_size
+          in: query
       responses:
         '200':
           description: A JSON array of users.

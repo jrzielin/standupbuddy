@@ -23,10 +23,22 @@ getItems = (req, res) => {
         .catch(err => res.status(500).json({error: 'Unable to get items'}));
     }
     else {
+        let page = parseInt(req.query.page) || 1;
+        let page_size = parseInt(req.query.page_size) || 10;
+        const search = req.query.search || '';
+
+        if(page < 1) page = 1;
+        if(page_size > 100) page_size = 100;
+        
+        const offset = (page - 1) * page_size;
+
         db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
         .from('items')
-        .where('user_id', userId)
+        .where({user_id: userId})
+        .where('title', 'ilike', '%' + search + '%')
         .orderBy('item_date')
+        .limit(page_size)
+        .offset(offset)
         .then(items => res.status(200).json({items: items}))
         .catch(err => res.status(500).json({error: 'Unable to get items'}));
     }
