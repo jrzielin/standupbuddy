@@ -72,9 +72,9 @@ updateTeam = (req, res) => {
 }
 
 deleteTeam = (req, res) => {
-    const team_id = parseInt(req.params.teamId) || null;
+    const id = parseInt(req.params.teamId) || null;
 
-    if(!team_id) return missingTeamIdResponse(res);
+    if(!id) return missingTeamIdResponse(res);
 
     db
     .select(['id', 'name', 'owner_id'])
