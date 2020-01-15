@@ -263,6 +263,18 @@ paths:
           required: true
           schema:
             type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: 'Code different feature'
+                item_date:
+                  type: string
+                  example: '2020-01-01T:00:00:00Z'
       responses:
         '200':
           description: Item object updated.
