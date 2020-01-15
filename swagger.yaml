@@ -208,6 +208,18 @@ paths:
       summary: 'Create a new item.'
       security:
         - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: 'Code new feature'
+                item_date:
+                  type: string
+                  example: '2020-01-01T:00:00:00Z'
       responses:
         '201':
           description: A new item was created.
