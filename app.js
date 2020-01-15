@@ -11,6 +11,7 @@ const app = express();
 const authenticationController = require('./controllers/authentication');
 const teamController = require('./controllers/teams');
 const itemController = require('./controllers/items');
+const userController = require('./controllers/users');
 const passport = require('passport');
 
 app.use(helmet());
@@ -41,6 +42,10 @@ app.post('/api/items', passport.authenticate('jwt', {session: false}), itemContr
 app.get('/api/items/:itemId', passport.authenticate('jwt', {session: false}), itemController.getItem);
 app.put('/api/items/:itemId', passport.authenticate('jwt', {session: false}), itemController.updateItem);
 app.delete('/api/items/:itemId', passport.authenticate('jwt', {session: false}), itemController.deleteItem);
+
+/* Users */
+app.get('/api/users', passport.authenticate('jwt', {session: false}), userController.getUsers);
+app.get('/api/users/:userId', passport.authenticate('jwt', {session: false}), userController.getUser);
 
 /* Render React Front End */
 app.get('*', (req, res) => {

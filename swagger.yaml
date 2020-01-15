@@ -395,9 +395,6 @@ components:
       properties:
         id:
           type: integer
-        email:
-          type: string
-          example: johndoe@example.com
         first_name:
           type: string
           example: John
