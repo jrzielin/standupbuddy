@@ -73,6 +73,7 @@ updateTeam = (req, res) => {
 
 deleteTeam = (req, res) => {
     const id = parseInt(req.params.teamId) || null;
+    const user_id = req.user.id;
 
     if(!id) return missingTeamIdResponse(res);
 
