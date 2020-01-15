@@ -1,15 +1,20 @@
 import React from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from './screens/Home';
-import NotFound from './screens/NotFound';
+import {BrowserRouter as Router, Switch} from "react-router-dom";
+import StandupList from './components/StandupList';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import UnAuthRoute from './components/UnAuthRoute';
+import HomeRoute from './components/HomeRoute';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="*" component={NotFound} />
+        <UnAuthRoute path="/login" component={Login} />
+        <UnAuthRoute path="/signup" component={Signup} />
+        <PrivateRoute path="/items" component={StandupList} />
+        <HomeRoute path="/" component={StandupList} />
       </Switch>
     </Router>
   );

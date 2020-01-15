@@ -1,0 +1,11 @@
+.hoverable:hover {
+    cursor: pointer;
+}
+
+li:hover {
+    cursor: pointer;
+}
+
+.icon:hover {
+    cursor: pointer;
+}
