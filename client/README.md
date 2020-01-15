@@ -1,1 +1,1 @@
-Front End App for Standup Buddy Written in ReactJS. Talks to the [Standup Buddy API](https://github.com/jrzielin/standup-buddy-api).
+Front End App for Standup Buddy Written in ReactJS.

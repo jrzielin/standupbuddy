@@ -1,0 +1,1 @@
+Front End and Back End for [Standup Buddy](https://standup-buddy.herokuapp.com) all wrapped into one.
