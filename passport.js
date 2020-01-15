@@ -12,7 +12,10 @@ passport.use(new LocalStrategy({
         passwordField: 'password'
     }, 
     function (email, password, cb) {
-        db.select(['id', 'email', 'password', 'first_name', 'last_name', 'created_at']).where({email})
+        db
+        .select(['id', 'email', 'password', 'first_name', 'last_name', 'created_at'])
+        .from('users')
+        .where({email})
         .then(data => {
             if(data.length) {
                 data = data[0];
