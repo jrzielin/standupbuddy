@@ -31,22 +31,6 @@ class Navbar extends Component {
         }        
     }
 
-    handleDropdown = (e) => {
-        const isActiveDropdown = this.state.isActiveDropdown;
-        if(!isActiveDropdown) {
-            this.setState({
-                isActiveDropdown: true,
-                dropdownClass: 'dropdown is-active'
-            });
-        }
-        else {
-            this.setState({
-                isActiveDropdown: false,
-                dropdownClass: 'dropdown'
-            });
-        }
-    }
-
     render() {
         return (
             <nav className="navbar" role="navigation" aria-label="main navigation">
