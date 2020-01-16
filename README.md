@@ -1,3 +1,3 @@
-Front End and Back End for [Standup Buddy](https://standup-buddy.herokuapp.com) all wrapped into one.
+Front End and Back End for [Standup Buddy](https://www.standupbuddy.net) all wrapped into one.
 
-Documentation for the API can be found [here](https://standup-buddy.herokuapp.com/api/docs).
+Documentation for the API can be found [here](https://www.standupbuddy.net/api/docs).
