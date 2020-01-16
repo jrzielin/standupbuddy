@@ -7,6 +7,7 @@ import UnAuthRoute from './components/UnAuthRoute';
 import HomeRoute from './components/HomeRoute';
 import PrivateRoute from './components/PrivateRoute';
 import NotFound from './screens/NotFound';
+import Home from './screens/Home';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <UnAuthRoute path="/login" component={Login} />
         <UnAuthRoute path="/signup" component={Signup} />
         <PrivateRoute path="/items" component={StandupList} />
-        <HomeRoute exact path="/" component={StandupList} />
+        <HomeRoute exact path="/" component={Home} />
         <Route path="*" component={NotFound} />
       </Switch>
     </Router>

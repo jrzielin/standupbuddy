@@ -51,7 +51,7 @@ class Login extends Component {
             
             if(response.hasOwnProperty('token')) {
                 localStorage.setItem('token', response.token);
-                Auth.authenticate(() => this.props.history.push('/items'));
+                Auth.authenticate(() => this.props.history.push('/'));
             }
             else if(response.hasOwnProperty('error')) {
                 this.setState({

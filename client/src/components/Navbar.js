@@ -7,32 +7,8 @@ class Navbar extends Component {
         super(props);
         this.state = {
             burgerClass: 'navbar-burger burger',
-            menuClass: 'navbar-menu',
-            isActiveDropdown: false,
-            dropdownClass: 'dropdown',
-            teams: []
+            menuClass: 'navbar-menu'
         };
-    }
-
-    componentDidMount = () => {
-        if(!this.props.authenticated) {
-            return;
-        }
-
-        fetch('/api/teams?mine=true', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(response => response.json())
-        .then(response => {
-            this.setState({
-                teams: response.teams
-            });
-        })
-        .catch(error => {
-            alert('Unable to pull teams');
-        });
     }
 
     logout = (e) => {
@@ -91,30 +67,6 @@ class Navbar extends Component {
                     <div className="navbar-item">
                         { this.props.authenticated && 
                             <div className="buttons">
-                                <div className={this.state.dropdownClass} style={{marginRight: '10px'}}>
-                                    <div className="dropdown-trigger">
-                                        <button className="button" aria-haspopup="true" aria-controls="dropdown-menu" onClick={this.handleDropdown}>
-                                        <span>Teams</span>
-                                        <span className="icon is-small">
-                                            <i className="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                        </button>
-                                    </div>
-                                    <div className="dropdown-menu" id="dropdown-menu" role="menu">
-                                        <div className="dropdown-content">
-                                            <Link to="/items" className="dropdown-item">
-                                                Personal
-                                            </Link>
-                                            {this.state.teams.map(team => {
-                                                return (
-                                                    <Link key={team.id} to={`/teams/${team.id}`} className="dropdown-item">
-                                                        {team.name}
-                                                    </Link>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
                                 <button className="button is-light" onClick={this.logout}>
                                     Log out
                                 </button>
