@@ -78,7 +78,7 @@ export default class Home extends Component {
                         close={this.handleClose}
                     />
                 }
-                <section>
+                <section className="section">
                     <div className="container">
                         <h1 className="title" style={{textAlign: 'center'}}>Home</h1>
                         {!this.state.loading && !this.state.teams.length && 

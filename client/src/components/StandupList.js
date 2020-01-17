@@ -582,7 +582,7 @@ class StandupList extends Component {
                         <button className="modal-close is-large" aria-label="close" onClick={this.closeModal}></button>
                     </div>
                 }
-                <section>
+                <section className="section">
                     <div className="container">
                         {this.state.error && 
                             <div className="notification is-danger" style={{textAlign: 'center'}}>
