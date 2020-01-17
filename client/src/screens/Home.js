@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from '../components/Navbar';
 import NewTeam from '../components/NewTeam';
+import { Link } from 'react-router-dom';
 
 export default class Home extends Component {
     constructor(props) {
@@ -77,7 +78,7 @@ export default class Home extends Component {
                         close={this.handleClose}
                     />
                 }
-                <section className="section">
+                <section>
                     <div className="container">
                         <h1 className="title" style={{textAlign: 'center'}}>Home</h1>
                         {!this.state.loading && !this.state.teams.length && 
@@ -105,10 +106,18 @@ export default class Home extends Component {
                                 <tbody>
                                     {this.state.teams.map((team, i) => {
                                         return (
-                                            <tr key={i} className="team-row" onClick={() => this.props.history.push(`/teams/${team.id}`)}>
+                                            <tr key={i} className="team-row">
                                                 <td>{i + 1}</td>
-                                                <td>{team.name}</td>
-                                                <td>{team.owner_id}</td>
+                                                <td>
+                                                    <Link to={{pathname: `/teams/${team.id}`}}>
+                                                        {team.name}
+                                                    </Link>
+                                                </td>
+                                                <td>
+                                                    <Link to={{pathname: `/users/${team.owner_id}`}}>
+                                                        {team.first_name} {team.last_name}
+                                                    </Link>
+                                                </td>
                                             </tr>
                                         );
                                     })}

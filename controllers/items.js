@@ -3,6 +3,14 @@ const moment = require('moment');
 
 getItems = (req, res) => {
     const userId = req.user.id;
+    const team_id = req.query.team_id;
+    let params = {
+        user_id: userId
+    };
+
+    if(team_id != undefined) {
+        params['team_id'] = parseInt(team_id) || null;
+    };
 
     if(req.query.item_date) {
         const ceilingDate = moment(req.query.item_date, 'YYYY-MM-DDTHH:mm:ssZ');
@@ -16,7 +24,7 @@ getItems = (req, res) => {
 
         db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
         .from('items')
-        .where('user_id', userId)
+        .where(params)
         .whereBetween('item_date', [floorDate.utc().format(), ceilingDate.utc().format()])
         .orderBy('item_date')
         .then(items => res.status(200).json({items: items}))
@@ -34,7 +42,7 @@ getItems = (req, res) => {
 
         db.select(['id', 'title', 'description', 'item_date', 'completed', 'user_id', 'created_at', 'team_id'])
         .from('items')
-        .where({user_id: userId})
+        .where(params)
         .where('title', 'ilike', '%' + search + '%')
         .orderBy('item_date')
         .limit(page_size)

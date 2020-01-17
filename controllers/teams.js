@@ -5,8 +5,9 @@ getTeams = (req, res) => {
     const mine = req.query.mine || 'false';
 
     if(mine == 'true') {
-        db.select(['id', 'name', 'owner_id', 'created_at'])
+        db.select(['teams.id', 'name', 'owner_id', 'users.first_name', 'users.last_name', 'teams.created_at'])
         .from('teams')
+        .join('users', {'teams.owner_id': 'users.id'})
         .where({owner_id: user_id})
         .orderBy('name')
         .then(teams => res.status(200).json({teams: teams}))
@@ -22,8 +23,9 @@ getTeams = (req, res) => {
         
         const offset = (page - 1) * page_size;
 
-        db.select(['id', 'name', 'owner_id', 'created_at'])
+        db.select(['teams.id', 'name', 'owner_id', 'users.first_name', 'users.last_name', 'teams.created_at'])
         .from('teams')
+        .join('users', {'teams.owner_id': 'users.id'})
         .where('name', 'ilike', '%' + search + '%')
         .orderBy('name')
         .limit(page_size)

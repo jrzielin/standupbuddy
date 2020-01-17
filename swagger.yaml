@@ -200,6 +200,9 @@ paths:
         - name: search
           in: query
           description: Filter results containing search.
+        - name: team_id
+          in: query
+          description: Filter results by team.
         - name: page
           in: query
         - name: page_size

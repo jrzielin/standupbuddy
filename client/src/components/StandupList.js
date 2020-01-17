@@ -25,19 +25,35 @@ class StandupList extends Component {
             editCompleted: false,
             editYesterday: false,
             error: false,
-            errorMsg: ''
+            errorMsg: '',
+            team: null
         };
     }
 
     componentDidMount() {
         document.title = 'Standup Buddy | Items';
+        this.fetchTeam();
         this.fetchItems(this.state.date);
+    }
+
+    fetchTeam = () => {
+        const teamId = this.props.match.params.id;
+
+        fetch(`/api/teams/${teamId}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(res => res.json())
+        .then(res => this.setState({team: res.team}))
+        .catch(err => console.log(err));
     }
 
     fetchItems = (date) => {
         let temp = date.clone();
         const dateString = temp.hours(23).minutes(59).seconds(59).utc().format();
-        const url = '/api/items?item_date=' + dateString;
+        const teamId = this.props.match.params.id;
+        const url = `/api/items?item_date=${dateString}&team_id=${teamId}`;
 
         fetch(url, {
             headers: {
@@ -136,7 +152,8 @@ class StandupList extends Component {
             },
             body: JSON.stringify({
                 title: this.state.newYesterdayText,
-                item_date: yesterdayItemDate
+                item_date: yesterdayItemDate,
+                team_id: this.state.team.id
             })
         })
         .then(response => response.json())
@@ -189,7 +206,8 @@ class StandupList extends Component {
             },
             body: JSON.stringify({
                 title: this.state.newTodayText,
-                item_date: dateString
+                item_date: dateString,
+                team_id: this.state.team.id
             })
         })
         .then(response => response.json())
@@ -564,13 +582,18 @@ class StandupList extends Component {
                         <button className="modal-close is-large" aria-label="close" onClick={this.closeModal}></button>
                     </div>
                 }
-                <section className="section">
+                <section>
                     <div className="container">
                         {this.state.error && 
                             <div className="notification is-danger" style={{textAlign: 'center'}}>
                                 <button className="delete" onClick={this.closeMessage} />
                                 {this.state.errorMsg}
                             </div>
+                        }
+                        {this.state.team && 
+                            <h1 className="title" style={{textAlign: 'center'}}>
+                                {this.state.team.name}
+                            </h1>
                         }
                         <DateStepper 
                             date={this.state.date.format('YYYY-MM-DD')}
