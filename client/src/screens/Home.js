@@ -94,11 +94,26 @@ export default class Home extends Component {
                             </div>
                         }
                         <div>
-                            {this.state.teams.map(team => {
-                                return (
-                                    <div>{team.name}</div>
-                                );
-                            })}
+                            <table className="table" style={{width: '100%'}}>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Team</th>
+                                        <th>Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.teams.map((team, i) => {
+                                        return (
+                                            <tr key={i} className="team-row" onClick={() => this.props.history.push(`/teams/${team.id}`)}>
+                                                <td>{i + 1}</td>
+                                                <td>{team.name}</td>
+                                                <td>{team.owner_id}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </section>

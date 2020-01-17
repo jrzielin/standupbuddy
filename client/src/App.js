@@ -15,7 +15,7 @@ function App() {
       <Switch>
         <UnAuthRoute path="/login" component={Login} />
         <UnAuthRoute path="/signup" component={Signup} />
-        <PrivateRoute path="/items" component={StandupList} />
+        <PrivateRoute path="/teams/:id" component={StandupList} />
         <HomeRoute exact path="/" component={Home} />
         <Route path="*" component={NotFound} />
       </Switch>

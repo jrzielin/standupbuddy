@@ -48,25 +48,25 @@ class Navbar extends Component {
                 <div id="navbarBasicExample" className={this.state.menuClass}>
                     <div className="navbar-start" />
                     <div className="navbar-end">
-                    <div className="navbar-item">
-                        { this.props.authenticated && 
-                            <div className="buttons">
-                                <button className="button is-light" onClick={this.logout}>
-                                    Log out
-                                </button>
-                            </div>
-                        }
-                        { !this.props.authenticated && 
-                            <div className="buttons">
-                                <Link className="button is-primary" to="/signup">
-                                    <strong>Sign up</strong>
-                                </Link>
-                                <Link className="button is-light" to="/login">
-                                    Log in
-                                </Link>
-                            </div>
-                        }
-                    </div>
+                        <div className="navbar-item">
+                            { this.props.authenticated && 
+                                <div className="buttons">
+                                    <button className="button is-light" onClick={this.logout}>
+                                        Log out
+                                    </button>
+                                </div>
+                            }
+                            { !this.props.authenticated && 
+                                <div className="buttons">
+                                    <Link className="button is-primary" to="/signup">
+                                        <strong>Sign up</strong>
+                                    </Link>
+                                    <Link className="button is-light" to="/login">
+                                        Log in
+                                    </Link>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </nav>
