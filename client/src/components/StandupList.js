@@ -31,7 +31,6 @@ class StandupList extends Component {
     }
 
     componentDidMount() {
-        document.title = 'Standup Buddy | Items';
         this.fetchTeam();
         this.fetchItems(this.state.date);
     }
@@ -45,7 +44,10 @@ class StandupList extends Component {
             }
         })
         .then(res => res.json())
-        .then(res => this.setState({team: res.team}))
+        .then(res => {
+            this.setState({team: res.team});
+            document.title = `Standup Buddy | ${res.team.name} | Items`;
+        })
         .catch(err => console.log(err));
     }
 
