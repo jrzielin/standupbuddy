@@ -4,7 +4,7 @@ info:
   description: API for keeping track of standup meeting updates.
   version: 1.0.0
 servers:
-  - url: https://standup-buddy.herokuapp.com/api
+  - url: https://www.standupbuddy.net/api
 paths:
   /register:
     post:
