@@ -14,8 +14,13 @@ function NewTeam(props) {
                                 <input className="input" type="text" value={props.newTeamName} onChange={props.onChange} autoFocus />
                             </div>
                         </div>
-                        <div className="control">
-                            <button type="submit" className="button is-primary">Submit</button>
+                        <div className="field is-grouped">
+                            <div className="control">
+                                <button type="submit" className="button is-primary">Submit</button>
+                            </div>
+                            <div className="control">
+                                <button type="button" className="button" onClick={props.close}>Cancel</button>
+                            </div>
                         </div>
                     </form>
                 </div>
