@@ -4,6 +4,7 @@ import NewTeam from '../components/Team/NewTeam';
 import EditTeam from '../components/Team/EditTeam';
 import DeleteTeam from '../components/Team/DeleteTeam';
 import { Link } from 'react-router-dom';
+import FadeIn from 'react-fade-in';
 
 class Home extends Component {
     constructor(props) {
@@ -150,54 +151,62 @@ class Home extends Component {
                 <section className="section">
                     <div className="container">
                         <h1 className="title" style={{textAlign: 'center'}}>Home</h1>
-                        {!this.state.loading && !this.state.teams.length && 
-                            <div style={{ textAlign: 'center' }}>
-                                <div>Looks like you haven't set up any teams yet!</div>
-                                <div style={{ marginTop: '20px' }}>
+                        {!this.state.loading && !this.state.teams.length &&
+                            <FadeIn>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div>Looks like you haven't set up any teams yet!</div>
+                                    <div style={{ marginTop: '20px' }}>
+                                        <button type="button" className="button is-primary" onClick={this.createTeam}>Create a Team</button>
+                                    </div>
+                                </div>
+                            </FadeIn>
+                        }
+                        {!this.state.loading && this.state.teams.length > 0 &&
+                            <FadeIn>
+                                <div style={{ marginTop: '20px', marginBottom: '20px' }}>
                                     <button type="button" className="button is-primary" onClick={this.createTeam}>Create a Team</button>
                                 </div>
-                            </div>
+                            </FadeIn>
                         }
-                        {!this.state.loading && this.state.teams.length &&
-                            <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-                                <button type="button" className="button is-primary" onClick={this.createTeam}>Create a Team</button>
-                            </div>
-                        }
-                        <div>
-                            <table className="table" style={{width: '100%'}}>
-                                <thead>
-                                    <tr>
-                                        <th>Team</th>
-                                        <th>Owner</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.teams.map((team, i) => {
-                                        return (
-                                            <tr key={i} className="team-row">
-                                                <td>
-                                                    <Link to={{pathname: `/teams/${team.id}`}} style={{color: 'inherit'}}>
-                                                        {team.name}
-                                                    </Link>
-                                                </td>
-                                                <td>
-                                                    {team.first_name} {team.last_name}
-                                                </td>
-                                                <td>
-                                                    <span className="icon is-small" style={{marginRight: '5px'}} onClick={(e) => this.editTeam(e, team)}>
-                                                        <i className="fas fa-pencil-alt" />
-                                                    </span>
-                                                    <span className="icon is-small" onClick={(e) => this.deleteTeam(e, team)}>
-                                                        <i className="fas fa-trash" />
-                                                    </span>
-                                                </td>
+                        {this.state.teams.length > 0 &&
+                            <FadeIn>
+                                <div>
+                                    <table className="table" style={{width: '100%'}}>
+                                        <thead>
+                                            <tr>
+                                                <th>Team</th>
+                                                <th>Owner</th>
+                                                <th>Actions</th>
                                             </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
+                                        </thead>
+                                        <tbody>
+                                            {this.state.teams.map((team, i) => {
+                                                return (
+                                                    <tr key={i} className="team-row">
+                                                        <td>
+                                                            <Link to={{pathname: `/teams/${team.id}`}} style={{color: 'inherit'}}>
+                                                                {team.name}
+                                                            </Link>
+                                                        </td>
+                                                        <td>
+                                                            {team.first_name} {team.last_name}
+                                                        </td>
+                                                        <td>
+                                                            <span className="icon is-small" style={{marginRight: '5px'}} onClick={(e) => this.editTeam(e, team)}>
+                                                                <i className="fas fa-pencil-alt" />
+                                                            </span>
+                                                            <span className="icon is-small" onClick={(e) => this.deleteTeam(e, team)}>
+                                                                <i className="fas fa-trash" />
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </FadeIn>
+                        }
                     </div>
                 </section>
             </div>
