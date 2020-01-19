@@ -6,6 +6,7 @@ import AddForm from '../components/StandupList/AddForm';
 import EditForm from '../components/StandupList/EditForm';
 import Card from '../components/StandupList/Card';
 import moment from 'moment';
+import FadeIn from 'react-fade-in';
 
 class StandupList extends Component {
     constructor(props) {
@@ -26,13 +27,13 @@ class StandupList extends Component {
             editYesterday: false,
             error: false,
             errorMsg: '',
-            team: null
+            team: null,
+            loading: true
         };
     }
 
     componentDidMount() {
         this.fetchTeam();
-        this.fetchItems(this.state.date);
     }
 
     fetchTeam = () => {
@@ -45,13 +46,14 @@ class StandupList extends Component {
         })
         .then(res => res.json())
         .then(res => {
-            this.setState({team: res.team});
             document.title = `Standup Buddy | ${res.team.name} | Items`;
+            this.setState({team: res.team});
+            this.fetchItems(this.state.date, () => this.setState({loading: false}));
         })
         .catch(err => console.log(err));
     }
 
-    fetchItems = (date) => {
+    fetchItems = (date, cb) => {
         let temp = date.clone();
         const dateString = temp.hours(23).minutes(59).seconds(59).utc().format();
         const teamId = this.props.match.params.id;
@@ -95,6 +97,10 @@ class StandupList extends Component {
                 yesterday: yesterday,
                 today: today
             });
+            
+            if(cb) {
+                cb();
+            }
         })
         .catch(error => {
             this.setState({
@@ -596,65 +602,71 @@ class StandupList extends Component {
                                 {this.state.team.name}
                             </h1>
                         }
-                        <DateStepper 
-                            date={this.state.date.format('YYYY-MM-DD')}
-                            prettyDate={this.state.date.format('dddd MMM D')}
-                            forwardStep={this.forwardStep}
-                            backwardStep={this.backwardStep}
-                            dateInputShow={this.state.dateInputShow}
-                        />
-                        <div className="columns">
-                            <div className="column">
-                                <Card 
-                                    style={styles.primary}
-                                    items={this.state.yesterday}
-                                    handleClick={this.editYesterdayClick}
-                                    title="Yesterday"
-                                    complete={this.quickCompleteItem}
-                                    uncomplete={this.quickUncompleteItem}
-                                    delete={this.quickDeleteItem}
-                                />
-                                <div style={styles.padTop}>
-                                    { this.state.yesterdayForm && 
-                                        <AddForm 
-                                            handleSubmit={this.yesterdaySubmit}
-                                            handleChange={this.yesterdayChange}
-                                            handleCancel={this.cancelYesterday}
-                                            newYesterdayText={this.state.newYesterdayText}
-                                            btnClass="button is-primary"
-                                        />
-                                    }
-                                    { !this.state.yesterdayForm && 
-                                        <button className="button is-primary" style={styles.fullWidth} onClick={this.yesterdayClick}>Add</button>
-                                    }
+                        {!this.state.loading &&
+                            <FadeIn>
+                                <div>
+                                    <DateStepper 
+                                        date={this.state.date.format('YYYY-MM-DD')}
+                                        prettyDate={this.state.date.format('dddd MMM D')}
+                                        forwardStep={this.forwardStep}
+                                        backwardStep={this.backwardStep}
+                                        dateInputShow={this.state.dateInputShow}
+                                    />
+                                    <div className="columns">
+                                        <div className="column">
+                                            <Card 
+                                                style={styles.primary}
+                                                items={this.state.yesterday}
+                                                handleClick={this.editYesterdayClick}
+                                                title="Yesterday"
+                                                complete={this.quickCompleteItem}
+                                                uncomplete={this.quickUncompleteItem}
+                                                delete={this.quickDeleteItem}
+                                            />
+                                            <div style={styles.padTop}>
+                                                { this.state.yesterdayForm && 
+                                                    <AddForm 
+                                                        handleSubmit={this.yesterdaySubmit}
+                                                        handleChange={this.yesterdayChange}
+                                                        handleCancel={this.cancelYesterday}
+                                                        newYesterdayText={this.state.newYesterdayText}
+                                                        btnClass="button is-primary"
+                                                    />
+                                                }
+                                                { !this.state.yesterdayForm && 
+                                                    <button className="button is-primary" style={styles.fullWidth} onClick={this.yesterdayClick}>Add</button>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className="column">
+                                            <Card 
+                                                style={styles.info}
+                                                items={this.state.today}
+                                                handleClick={this.editTodayClick}
+                                                title="Today"
+                                                complete={this.quickCompleteItem}
+                                                uncomplete={this.quickUncompleteItem}
+                                                delete={this.quickDeleteItem}
+                                            />
+                                            <div style={styles.padTop}>
+                                                { this.state.todayForm && 
+                                                    <AddForm 
+                                                        handleSubmit={this.todaySubmit}
+                                                        handleChange={this.todayChange}
+                                                        handleCancel={this.cancelToday}
+                                                        newYesterdayText={this.state.newTodayText}
+                                                        btnClass="button is-info"
+                                                    />
+                                                }
+                                                { !this.state.todayForm && 
+                                                    <button className="button is-info" style={styles.fullWidth} onClick={this.todayClick}>Add</button>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="column">
-                                <Card 
-                                    style={styles.info}
-                                    items={this.state.today}
-                                    handleClick={this.editTodayClick}
-                                    title="Today"
-                                    complete={this.quickCompleteItem}
-                                    uncomplete={this.quickUncompleteItem}
-                                    delete={this.quickDeleteItem}
-                                />
-                                <div style={styles.padTop}>
-                                    { this.state.todayForm && 
-                                        <AddForm 
-                                            handleSubmit={this.todaySubmit}
-                                            handleChange={this.todayChange}
-                                            handleCancel={this.cancelToday}
-                                            newYesterdayText={this.state.newTodayText}
-                                            btnClass="button is-info"
-                                        />
-                                    }
-                                    { !this.state.todayForm && 
-                                        <button className="button is-info" style={styles.fullWidth} onClick={this.todayClick}>Add</button>
-                                    }
-                                </div>
-                            </div>
-                        </div>
+                            </FadeIn>
+                        }
                     </div>
                 </section>
             </div>
