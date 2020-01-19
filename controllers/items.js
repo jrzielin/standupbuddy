@@ -113,8 +113,6 @@ updateItem = (req, res) => {
         }
     })
     .catch(err => {
-        console.log(err);
-        console.log({completed});
         res.status(500).json({error: 'Unable to update item.'})
     });
 }
