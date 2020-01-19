@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NewTeam(props) {
+function NewTeam(props) {
     return (
         <div className="modal is-active">
             <div className="modal-background" onClick={props.close}></div>
@@ -24,3 +24,5 @@ export default function NewTeam(props) {
         </div>
     );
 }
+
+export default NewTeam;

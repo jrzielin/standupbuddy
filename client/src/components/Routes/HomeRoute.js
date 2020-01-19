@@ -1,5 +1,5 @@
 import React from 'react';
-import Auth from '../helpers/Auth';
+import Auth from '../../helpers/Auth';
 import { Route, Redirect } from 'react-router-dom';
 
 const HomeRoute = ({ component: Component, ...rest }) => (

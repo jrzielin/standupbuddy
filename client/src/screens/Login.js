@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Navbar from './Navbar';
+import Navbar from '../components/Navbar';
 import Auth from '../helpers/Auth';
 
 class Login extends Component {

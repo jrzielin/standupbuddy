@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import './StandupList.css';
-import Navbar from './Navbar';
-import DateStepper from './DateStepper';
-import AddForm from './AddForm';
-import EditForm from './EditForm';
-import Card from './Card';
+import '../components/StandupList/StandupList.css';
+import Navbar from '../components/Navbar';
+import DateStepper from '../components/StandupList/DateStepper';
+import AddForm from '../components/StandupList/AddForm';
+import EditForm from '../components/StandupList/EditForm';
+import Card from '../components/StandupList/Card';
 import moment from 'moment';
 
 class StandupList extends Component {

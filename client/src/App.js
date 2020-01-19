@@ -1,13 +1,13 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import StandupList from './components/StandupList';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import UnAuthRoute from './components/UnAuthRoute';
-import HomeRoute from './components/HomeRoute';
-import PrivateRoute from './components/PrivateRoute';
+import UnAuthRoute from './components/Routes/UnAuthRoute';
+import HomeRoute from './components/Routes/HomeRoute';
+import PrivateRoute from './components/Routes/PrivateRoute';
 import NotFound from './screens/NotFound';
 import Home from './screens/Home';
+import StandupList from './screens/StandupList';
+import Login from './screens/Login';
+import Signup from './screens/Signup';
 
 function App() {
   return (

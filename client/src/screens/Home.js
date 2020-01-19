@@ -5,7 +5,7 @@ import EditTeam from '../components/Team/EditTeam';
 import DeleteTeam from '../components/Team/DeleteTeam';
 import { Link } from 'react-router-dom';
 
-export default class Home extends Component {
+class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -204,3 +204,5 @@ export default class Home extends Component {
         );
     }
 }
+
+export default Home;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function NotFound(props) {
+function NotFound(props) {
     document.title = 'Standup Buddy | 404 Not Found';
 
     return (
@@ -14,3 +14,5 @@ export default function NotFound(props) {
         </section>
     );
 }
+
+export default NotFound;
