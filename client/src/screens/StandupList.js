@@ -89,7 +89,6 @@ class StandupList extends Component {
                 else if(yesterdayString === itemDate) {
                     yesterday.push(item);
                 }
-                console.log({todayString, yesterdayString, itemDate});
             }
             
             this.setState({
