@@ -96,7 +96,7 @@ updateItem = (req, res) => {
     let params = {};
     if(title) params['title'] = title;
     if(description) params['description'] = description;
-    if(completed) params['completed'] = completed;
+    if(completed == true || completed == false) params['completed'] = completed;
     if(teamId) params['team_id'] = teamId;
 
     db('items')
@@ -112,7 +112,11 @@ updateItem = (req, res) => {
             res.status(404).json({error: 'Item not found'});
         }
     })
-    .catch(err => res.status(500).json({error: 'Unable to update item.'}));
+    .catch(err => {
+        console.log(err);
+        console.log({completed});
+        res.status(500).json({error: 'Unable to update item.'})
+    });
 }
 
 deleteItem = (req, res) => {
