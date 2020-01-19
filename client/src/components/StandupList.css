@@ -9,3 +9,7 @@ li:hover {
 .icon:hover {
     cursor: pointer;
 }
+
+.section {
+    padding: 0 1.5rem 3rem 1.5rem
+}
