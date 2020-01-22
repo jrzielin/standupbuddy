@@ -44,8 +44,26 @@ createTeam = (req, res) => {
     db('teams')
     .insert({name, owner_id})
     .returning(['id', 'name', 'owner_id', 'created_at'])
-    .then(team => res.status(201).json({team: team[0]}))
+    .then(team => {
+        team = team[0];
+        addTeamMember(team.id, owner_id, (member) => {
+            team.members = [member];
+            res.status(201).json({team: team});
+        });
+    })
     .catch(err => res.status(500).json({error: 'Unable to create team'}));
+}
+
+addTeamMember = (team_id, user_id, cb) => {
+    db('user_teams')
+    .insert({team_id, user_id})
+    .returning(['team_id', 'user_id', 'joined_at'])
+    .then(user_team => {
+        if(cb) {
+            cb(user_team);
+        }
+    })
+    .catch(err => console.log(error));
 }
 
 getTeam = (req, res) => {
@@ -56,8 +74,30 @@ getTeam = (req, res) => {
     db.select(['id', 'name', 'owner_id', 'created_at'])
     .from('teams')
     .where({id: teamId})
-    .then(team => team.length ? res.status(200).json({team: team[0]}): res.status(404).json({error: 'Team not found'}))
+    .then(team => {
+        if(team.length) {
+            team = team[0];
+            getTeamMembers(team.id, (members) => {
+                team.members = members;
+                res.status(200).json({team: team});
+            })
+        }
+        else {
+            res.status(404).json({error: 'Team not found'});
+        }
+    })
     .catch(err => res.status(500).json({error: 'Unable to get team'}));
+}
+
+getTeamMembers = (team_id, cb) => {
+    db.select(['user_id', 'team_id', 'joined_at'])
+    .from('user_teams')
+    .where({team_id})
+    .orderBy('joined_at')
+    .then(user_teams => {
+        cb(user_teams);
+    })
+    .catch(err => console.log(err));
 }
 
 updateTeam = (req, res) => {
