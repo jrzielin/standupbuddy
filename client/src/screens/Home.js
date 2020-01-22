@@ -4,7 +4,6 @@ import NewTeam from '../components/Team/NewTeam';
 import EditTeam from '../components/Team/EditTeam';
 import DeleteTeam from '../components/Team/DeleteTeam';
 import { Link } from 'react-router-dom';
-import FadeIn from 'react-fade-in';
 
 class Home extends Component {
     constructor(props) {
@@ -152,24 +151,24 @@ class Home extends Component {
                     <div className="container">
                         <h1 className="title" style={{textAlign: 'center'}}>Home</h1>
                         {!this.state.loading && !this.state.teams.length &&
-                            <FadeIn>
+                            <div>
                                 <div style={{ textAlign: 'center' }}>
                                     <div>Looks like you haven't set up any teams yet!</div>
                                     <div style={{ marginTop: '20px' }}>
                                         <button type="button" className="button is-primary" onClick={this.createTeam}>Create a Team</button>
                                     </div>
                                 </div>
-                            </FadeIn>
+                            </div>
                         }
                         {!this.state.loading && this.state.teams.length > 0 &&
-                            <FadeIn>
+                            <div>
                                 <div style={{ marginTop: '20px', marginBottom: '20px' }}>
                                     <button type="button" className="button is-primary" onClick={this.createTeam}>Create a Team</button>
                                 </div>
-                            </FadeIn>
+                            </div>
                         }
                         {this.state.teams.length > 0 &&
-                            <FadeIn>
+                            <div>
                                 <div>
                                     <table className="table" style={{width: '100%'}}>
                                         <thead>
@@ -205,7 +204,7 @@ class Home extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-                            </FadeIn>
+                            </div>
                         }
                     </div>
                 </section>

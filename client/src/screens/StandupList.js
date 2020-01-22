@@ -6,7 +6,6 @@ import AddForm from '../components/StandupList/AddForm';
 import EditForm from '../components/StandupList/EditForm';
 import Card from '../components/StandupList/Card';
 import moment from 'moment';
-import FadeIn from 'react-fade-in';
 
 class StandupList extends Component {
     constructor(props) {
@@ -603,7 +602,7 @@ class StandupList extends Component {
                             </h1>
                         }
                         {!this.state.loading &&
-                            <FadeIn>
+                            <div>
                                 <div>
                                     <DateStepper 
                                         date={this.state.date.format('YYYY-MM-DD')}
@@ -665,7 +664,7 @@ class StandupList extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            </FadeIn>
+                            </div>
                         }
                     </div>
                 </section>
