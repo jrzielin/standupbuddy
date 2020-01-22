@@ -33,6 +33,7 @@ class StandupList extends Component {
 
     componentDidMount() {
         this.fetchTeam();
+        this.fetchItems(this.state.date);
     }
 
     fetchTeam = () => {
@@ -46,13 +47,12 @@ class StandupList extends Component {
         .then(res => res.json())
         .then(res => {
             document.title = `Standup Buddy | ${res.team.name} | Items`;
-            this.setState({team: res.team});
-            this.fetchItems(this.state.date, () => this.setState({loading: false}));
+            this.setState({team: res.team, loading: false});
         })
         .catch(err => console.log(err));
     }
 
-    fetchItems = (date, cb) => {
+    fetchItems = (date) => {
         let temp = date.clone();
         const dateString = temp.hours(23).minutes(59).seconds(59).utc().format();
         const teamId = this.props.match.params.id;
@@ -96,10 +96,6 @@ class StandupList extends Component {
                 yesterday: yesterday,
                 today: today
             });
-            
-            if(cb) {
-                cb();
-            }
         })
         .catch(error => {
             this.setState({
