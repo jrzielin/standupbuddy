@@ -90,12 +90,13 @@ getTeam = (req, res) => {
 }
 
 getTeamMembers = (team_id, cb) => {
-    db.select(['user_id', 'team_id', 'joined_at'])
-    .from('user_teams')
+    db('user_teams')
+    .join('users', 'user_teams.user_id', '=', 'users.id')
+    .select('users.id', 'users.first_name', 'users.last_name', 'user_teams.joined_at')
     .where({team_id})
-    .orderBy('joined_at')
-    .then(user_teams => {
-        cb(user_teams);
+    .orderBy('users.first_name')
+    .then(users => {
+        cb(users);
     })
     .catch(err => console.log(err));
 }
