@@ -183,7 +183,7 @@ class Home extends Component {
                                                 return (
                                                     <tr key={i} className="team-row">
                                                         <td>
-                                                            <Link to={{pathname: `/teams/${team.id}`}} style={{color: 'inherit'}}>
+                                                            <Link to={{pathname: `/teams/${team.id}/items`}} style={{color: 'inherit'}}>
                                                                 {team.name}
                                                             </Link>
                                                         </td>
