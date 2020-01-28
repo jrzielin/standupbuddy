@@ -5,7 +5,9 @@ import DateStepper from '../components/StandupList/DateStepper';
 import AddForm from '../components/StandupList/AddForm';
 import EditForm from '../components/StandupList/EditForm';
 import Card from '../components/StandupList/Card';
+import TeamNotFound from '../components/Team/TeamNotFound';
 import moment from 'moment';
+import isError from '../helpers/Error';
 
 class StandupList extends Component {
     constructor(props) {
@@ -27,7 +29,8 @@ class StandupList extends Component {
             error: false,
             errorMsg: '',
             team: null,
-            loading: true
+            loading: true,
+            teamError: false
         };
     }
 
@@ -46,6 +49,11 @@ class StandupList extends Component {
         })
         .then(res => res.json())
         .then(res => {
+            if(isError(res)) {
+                document.title = 'Standup Buddy | Team Not Found';
+                this.setState({teamError: true});
+                return;
+            }
             document.title = `Standup Buddy | ${res.team.name} | Items`;
             this.setState({team: res.team, loading: false});
         })
@@ -558,6 +566,15 @@ class StandupList extends Component {
             yesterday: "button is-primary",
             today: "button is-info"
         };
+
+        if(this.state.teamError) {
+            return (
+                <div>
+                    <Navbar authenticated={true} />
+                    <TeamNotFound />
+                </div>
+            );
+        }
 
         return (
             <div>
